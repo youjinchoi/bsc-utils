@@ -1,0 +1,25 @@
+{
+  "name": "bsc-utils",
+  "version": "1.0.0",
+  "description": "util scripts for bsc network",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/youjinchoi/bsc-utils.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/youjinchoi/bsc-utils/issues"
+  },
+  "homepage": "https://github.com/youjinchoi/bsc-utils#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "csv-parser": "^3.0.0",
+    "dom-parser": "^0.1.6",
+    "objects-to-csv": "^1.3.6"
+  }
+}
