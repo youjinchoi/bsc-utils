@@ -9,7 +9,12 @@ const getAdditionalTransactionInfo = transaction => {
     .then(response => {
       const parser = new DomParser();
       const dom = parser.parseFromString(response.data);
-      const valueString = dom.getElementById("ContentPlaceHolder1_spanValue").textContent.trim();
+      const valueElement = dom.getElementById("ContentPlaceHolder1_spanValue");
+      if (!valueElement) {
+        console.log(`no value for transaction ${transaction.Txhash}`);
+        return {...transaction};
+      }
+      const valueString = valueElement.textContent.trim();
       //console.log(valueString);
       const values = valueString.split("BNB");
       const BnbValue = Number(values[0].trim());
@@ -25,13 +30,12 @@ const getAdditionalTransactionInfo = transaction => {
     });
 }
 
-const appendAdditionalInfo = transactions => {
+const appendAdditionalInfo = (transactions, fileName) => {
   const promises = transactions.map(transaction => getAdditionalTransactionInfo(transaction));
   Promise.all(promises).then(values => {
     values.sort((a, b) => Number(a.UnixTimestamp) - Number(b.UnixTimestamp));
-    console.log("values", values);
     const csv = new ObjectsToCsv(values);
-    csv.toDisk('result.csv').then(() => console.log("finish"));
+    csv.toDisk(`result-${fileName}`).then(() => console.log("finish"));
   });
 }
 
@@ -42,7 +46,7 @@ const readCsv = fileName => {
     .on('data', (data) => results.push(data))
     .on('end', () => {
       // console.log(results);
-      appendAdditionalInfo(results);
+      appendAdditionalInfo(results, fileName);
       // [
       //   { NAME: 'Daffy Duck', AGE: '24' },
       //   { NAME: 'Bugs Bunny', AGE: '22' }
@@ -50,6 +54,6 @@ const readCsv = fileName => {
     });
 }
 
-readCsv("0812.csv");
+readCsv("0813-0814.csv");
 // const result = await getTransactionInfo("0x08f8717a567eb850249ea0247602988429003fb209130648905b9af0ba50066a");
 
